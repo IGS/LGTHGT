@@ -1,0 +1,41 @@
+version: '2'
+
+services: 
+
+ LGTview:
+  build: ./docker_LGTview/.
+  image: lgtview:latest
+  depends_on:
+   - MySQL
+   - mongo
+   - r
+  links:
+   - MySQL
+   - mongo
+   - r
+  ports:
+   - 443:443
+   - 8080:80
+  restart: always
+  volumes:
+   - "/home/lgtview/files_for_mongo_and_twinblast:/files_for_mongo_and_twinblast"
+  volumes_from:
+   - mongodata
+
+ mongodata:
+  image: mongo:2.6
+  volumes:
+   - /data/db
+  command: --break-mongo
+
+ mongo:
+  image: mongo:2.6
+  volumes_from:
+   - mongodata
+  ports:
+   - "27017:27017"
+  command: --smallfiles --rest
+
+ lgtv_r:
+  build: ./docker_R/.
+  image: lgtv_r:latest
