@@ -23,10 +23,10 @@ RUN sudo echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/fqdn
 RUN sudo a2enconf fqdn
 
 # Get the pre-configured conf files
-RUN sudo wget https://raw.githubusercontent.com/jmatsumura/docker_lgtview/master/misc/apache2.conf -O /etc/apache2/apache2.conf \
-		&& sudo wget https://raw.githubusercontent.com/jmatsumura/docker_lgtview/master/misc/twinblast.conf -O /etc/apache2/conf.d/twinblast.conf \
-		&& sudo wget https://raw.githubusercontent.com/jmatsumura/docker_lgtview/master/misc/curation_db.ini -O /var/www/html/conf/curation_db.ini \
-		&& sudo wget https://raw.githubusercontent.com/jmatsumura/docker_lgtview/master/misc/mongo_config.ini -O /var/www/html/conf/mongo_config.ini
+RUN sudo wget https://raw.githubusercontent.com/jmatsumura/LGTHGT/master/misc/apache2.conf -O /etc/apache2/apache2.conf \
+		&& sudo wget https://raw.githubusercontent.com/jmatsumura/LGTHGT/master/misc/twinblast.conf -O /etc/apache2/conf.d/twinblast.conf \
+		&& sudo wget https://raw.githubusercontent.com/jmatsumura/LGTHGT/master/misc/curation_db.ini -O /var/www/html/conf/curation_db.ini \
+		&& sudo wget https://raw.githubusercontent.com/jmatsumura/LGTHGT/master/misc/mongo_config.ini -O /var/www/html/conf/mongo_config.ini
 
 # Place ExtJS library accessible to webserver
 RUN sudo git clone https://github.com/NewbridgeGreen/extjs.git /var/www/html/ext-4.1.0
@@ -77,9 +77,9 @@ RUN cpanm --force CGI \
 # Enable modules for SSL/redirection and CGI
 RUN sudo a2enmod ssl \
 	&& sudo a2enmod cgi
-RUN sudo git clone https://github.com/jmatsumura/lgtview.git
-RUN sudo cp -r /lgtview/www/lgtview/html/* /var/www/html/. && sudo cp -r /lgtview/www/lgtview/cgi/* /var/www/html/cgi/.
-RUN sudo cp -r /lgtview/www/twinblast/html/* /var/www/html/. && sudo cp -r /lgtview/www/twinblast/cgi/* /var/www/html/cgi/.
+RUN sudo git clone https://github.com/jmatsumura/LGTHGT.git
+RUN sudo cp -r /LGTHGT/LGTView/www/lgtview/html/* /var/www/html/. && sudo cp -r /lgtview/www/lgtview/cgi/* /var/www/html/cgi/.
+RUN sudo cp -r /LGTHGT/LGTView/www/twinblast/html/* /var/www/html/. && sudo cp -r /lgtview/www/twinblast/cgi/* /var/www/html/cgi/.
 
 ################
 

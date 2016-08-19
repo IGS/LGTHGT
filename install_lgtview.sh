@@ -6,32 +6,6 @@ echo -e "\n\n*** PLEASE NOTE ***"
 echo -e "\nWhile there are various options here present to try and protect your data, YOU MUST VERIFY that the security is up to your standards before loading a sensitive dataset."
 echo -e "\n*******************\n"
 
-# First configure MySQL with or without a password depending on what the user wants.
-echo "----------------------------------------------------------------------------------------------------"
-echo -ne "\nWould you like to add a password for the root MySQL user? Please enter 'yes' or 'no': "
-read response 
-if [ "$response" = 'yes' ]; then
-	echo -ne "\nPlease enter the desired password for the root MySQL user: "
-	read -s password
-	echo -ne "\nPlease re-enter the password: "
-	read -s password_confirm
-
-	while [ "$password" != "$password_confirm" ]; do
-
-		echo -ne "\nPasswords do not match. Please re-enter the password: "
-		read -s password_confirm
-
-	done
-
-	echo -ne "\nNow setting a root password for MySQL. View the docker-compose.yml file if you lose this password."
-	sed -i "26s/ALLOW_EMPTY_PASSWORD: 1/ROOT_PASSWORD: $password_confirm/" ./docker-compose.yml
-	echo -e "\nDone setting root password for MySQL."
-fi
-if [ -d "./.data/db" ]; then
-	mkdir -p ./.data/db
-fi
-echo -e "----------------------------------------------------------------------------------------------------"
-
 # At this point need to download a few files that are going to be mounted via
 # docker-compose so that MongoDB can be initiated with the necessary taxonomy data
 echo "\nSetting up the necessary local directories and files for MongoDB and TwinBLAST......"
@@ -74,8 +48,8 @@ echo -e "\nGoing to build and run the Docker containers now......"
 #  - Houses the MongoDB server
 # 3. dockerlgtview_mongodata_1
 #  - A container to establish persistent MongoDB data
-# 4. dockerlgtview_MySQL_1
-#  - Houses the MySQL server
+# 4. dockerlgtview_R_1
+#  - Houses the R package and necessary dependencies
 docker-compose up -d
 
 echo -e "\n----------------------------------------------------------------------------------------------------"
@@ -160,20 +134,6 @@ else
 	echo -ne "SSL NOT implemented (access site through http). Transmitted data is potentially subject to eavesdropping."
 	docker exec -it dockerlgtview_LGTview_1 sed -i "/localhost\:443/d" /var/www/html/lgtview.js
 fi
-echo -e "\n----------------------------------------------------------------------------------------------------"
-
-# Make sure the MySQL server container is up and running
-UP=$(docker ps -a | grep 'mysql' | grep 'Up' | wc -l);
-while [ "$UP" -ne 1 ]; do
-	UP=$(docker ps -a | grep 'mysql' | grep 'Up' | wc -l);
-	sleep 5
-done
-
-echo "Going to prepare the MySQL database..."
-# Now populate the MySQL database to prepare for curation via TwinBLAST
-docker exec -it dockerlgtview_LGTview_1 perl /lgtview/bin/init_db.pl
-docker exec -it dockerlgtview_LGTview_1 mv /files_for_mongo_and_twinblast/example_blastn.out /export/lgt/files/.
-echo "MySQL database now ready."
 echo -e "\n----------------------------------------------------------------------------------------------------"
 
 # Make sure the MongoDB server container is up and running
