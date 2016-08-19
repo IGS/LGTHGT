@@ -6,6 +6,7 @@ Ext.onReady(function(){
         db: 'lgtview_example',
         host: '172.18.0.1:27017',
         site: 'http://localhost:8080/twinblast.html'
+        site: 'https://localhost:443/twinblast.html'
     };
     var allStores = [];
     var portlets = {

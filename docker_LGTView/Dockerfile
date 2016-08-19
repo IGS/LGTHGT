@@ -77,9 +77,12 @@ RUN cpanm --force CGI \
 # Enable modules for SSL/redirection and CGI
 RUN sudo a2enmod ssl \
 	&& sudo a2enmod cgi
+
+# Place the relevant CGI, HTML/JS, and scripts in the correct directories
 RUN sudo git clone https://github.com/jmatsumura/LGTHGT.git
 RUN sudo cp -r /LGTHGT/LGTView/www/lgtview/html/* /var/www/html/. && sudo cp -r /lgtview/www/lgtview/cgi/* /var/www/html/cgi/.
 RUN sudo cp -r /LGTHGT/LGTView/www/twinblast/html/* /var/www/html/. && sudo cp -r /lgtview/www/twinblast/cgi/* /var/www/html/cgi/.
+RUN sudo cp -r /LGTHGT/LGTView/bin/* /usr/bin/.
 
 ################
 

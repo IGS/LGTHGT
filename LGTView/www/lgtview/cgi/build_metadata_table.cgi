@@ -156,7 +156,7 @@ while (my $sra_dirs = <$sra_list_file>) { # process each SRA LGTSeek output resu
 
 	# Process the BLAST results so that TwinBLAST only houses those that match. This will be done by
 	# refine_blast_data.pl
-	#`./refine_blast_data.pl $blast_in $lgt_in $sra_dirs$single_blast`;
+	`/usr/bin/refine_blast_data.pl $blast_in $lgt_in $sra_dirs$single_blast`;
 
 	print $blast_list_file "$sra_dirs$single_blast\n"; # file for merging
 }
@@ -257,5 +257,5 @@ if($uniq_sra > 1) {
 	close $sra_list_file2;
 
 	# Use merge_blast_or_bam_lists.pl to merge the BLAST files
-	#`./merge_blast_or_bam_lists.pl $blast_list blast $final_blast`
+	`/usr/bin/merge_blast_or_bam_lists.pl $blast_list blast $final_blast`
 }

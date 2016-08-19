@@ -119,7 +119,7 @@ print $outfile "$pchart_line\n$filter_line";
 close $outfile;
 
 # Modify the JS
-`./configure_lgtview_for_metadata.pl /export/lgt/files/md_config_file.tsv /var/www/html/lgtview.js`;
+`/usr/bin/configure_lgtview_for_metadata.pl /export/lgt/files/md_config_file.tsv /var/www/html/lgtview.js`;
 
 # Load MongoDB
-`./lgt_load_mongo.pl --metadata=/export/lgt/files/final_metadata.out --db=lgtview_example --host=172.18.0.1:27017`;
+`/usr/bin/lgt_load_mongo.pl --metadata=/export/lgt/files/final_metadata.out --db=lgtview_example --host=172.18.0.1:27017`;
