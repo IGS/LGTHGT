@@ -2,17 +2,15 @@ version: '2'
 
 services: 
 
- LGTview:
-  build: ./docker_LGTview/.
+ LGTView:
+  build: ./docker_LGTView/.
   image: lgtview:latest
   depends_on:
-   - MySQL
    - mongo
-   - r
+   - lgtv_r
   links:
-   - MySQL
    - mongo
-   - r
+   - lgtv_r
   ports:
    - 443:443
    - 8080:80
@@ -40,4 +38,5 @@ services:
  lgtv_r:
   build: ./docker_R/.
   image: lgtv_r:latest
-  volumes: /home/lgtview
+  volumes: 
+   - /home/lgtview
