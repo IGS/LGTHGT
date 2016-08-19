@@ -80,8 +80,8 @@ RUN sudo a2enmod ssl \
 
 # Place the relevant CGI, HTML/JS, and scripts in the correct directories
 RUN sudo git clone https://github.com/jmatsumura/LGTHGT.git
-RUN sudo cp -r /LGTHGT/LGTView/www/lgtview/html/* /var/www/html/. && sudo cp -r /lgtview/www/lgtview/cgi/* /var/www/html/cgi/.
-RUN sudo cp -r /LGTHGT/LGTView/www/twinblast/html/* /var/www/html/. && sudo cp -r /lgtview/www/twinblast/cgi/* /var/www/html/cgi/.
+RUN sudo cp -r /LGTHGT/LGTView/www/lgtview/html/* /var/www/html/. && sudo cp -r /LGTHGT/LGTView/lgtview/www/lgtview/cgi/* /var/www/html/cgi/.
+RUN sudo cp -r /LGTHGT/LGTView/www/twinblast/html/* /var/www/html/. && sudo cp -r /LGTHGT/LGTView/lgtview/www/twinblast/cgi/* /var/www/html/cgi/.
 RUN sudo cp -r /LGTHGT/LGTView/bin/* /usr/bin/.
 
 ################

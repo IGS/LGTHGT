@@ -6,7 +6,7 @@ use Getopt::Long qw(:config no_ignore_case no_auto_abbrev);
 use Pod::Usage;
 use File::Basename;
 use MongoDB;
-use lib '/lgtview/bin';
+use lib './';
 use GiTaxon;
 use Data::Dumper;
 $|++;

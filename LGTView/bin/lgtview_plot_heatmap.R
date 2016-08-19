@@ -223,7 +223,7 @@ if(abundance.type == "relative"){
 }
 
 # Now that the data has been populated, output the plot
-outfile <- "lgtview_heatmap.png"
+outfile <- "/home/lgtview/lgtview_heatmap.png"
 
 # Makes sense to print this to an image to reduce the amount of handling required
 # by the LGTView JS

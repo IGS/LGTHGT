@@ -11,6 +11,7 @@ echo -e "\n*******************\n"
 echo "Setting up the necessary local directories and files for MongoDB and TwinBLAST......"
 if [ -d "/home/lgtview/files_for_mongo_and_twinblast" ]; then
 	mkdir -p /home/lgtview/files_for_mongo_and_twinblast
+	chmod 777 /home/lgtview/files_for_mongo_and_twinblast
 fi
 
 if [ ! -f "/home/lgtview/files_for_mongo_and_twinblast/example_metadata.out" ]; then
@@ -31,10 +32,10 @@ read ssl_response
 if [ "$ssl_response" = 'yes' ]
 then
 	sed -i "/8080\:80/d" docker-compose.yml
-	sed -i "/EXPOSE 80/d" ./LGTview/Dockerfile
+	sed -i "/EXPOSE 80/d" ./docker_LGTView/Dockerfile
 else
 	sed -i "/443\:443/d" docker-compose.yml
-	sed -i "/EXPOSE 443/d" ./LGTview/Dockerfile
+	sed -i "/EXPOSE 443/d" ./docker_LGTView/Dockerfile
 fi
 
 echo "----------------------------------------------------------------------------------------------------"
@@ -42,13 +43,13 @@ echo "--------------------------------------------------------------------------
 echo -e "\nGoing to build and run the Docker containers now......"
 
 # Now, establish the following Docker containers:
-# 1. dockerlgtview_LGTview_1
+# 1. lgthgt_LGTview_1
 #  - Houses the Apache server and LGTview related code
-# 2. dockerlgtview_mongo_1
+# 2. lgthgt_mongo_1
 #  - Houses the MongoDB server
-# 3. dockerlgtview_mongodata_1
+# 3. lgthgt_mongodata_1
 #  - A container to establish persistent MongoDB data
-# 4. dockerlgtview_R_1
+# 4. lgthgt_R_1
 #  - Houses the R package and necessary dependencies
 docker-compose up -d
 
@@ -79,26 +80,26 @@ if [ "$response" = 'yes' ]; then
 
 	# Go into the Apache container and configure for passwords. Here, respond to the
 	# two interactive prompts using the supplied passwords.
-	docker exec -it dockerlgtview_LGTview_1 htpasswd -cb /etc/apache2/.htpasswd "$username" "$password_confirm"
+	docker exec -it lgthgt_LGTView_1 htpasswd -cb /etc/apache2/.htpasswd "$username" "$password_confirm"
 
 	# Now configure the necessary Apache confs to accommodate this protected setup.
-	docker exec -it dockerlgtview_LGTview_1 sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+	docker exec -it lgthgt_LGTView_1 sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 	# Just in case the installer has failed, clear the file and start anew
 	rm ./.htaccess
 	printf '%s\n%s\n%s\n%s' 'AuthType Basic' 'AuthName "Restricted Content"' 'AuthUserFile /etc/apache2/.htpasswd' 'Require valid-user' >> ./.htaccess
-	docker cp ./.htaccess dockerlgtview_LGTview_1:/var/www/html/.htaccess
+	docker cp ./.htaccess lgthgt_LGTView_1:/var/www/html/.htaccess
 
 	# Restart the Apache container with this new configuration
-	docker exec -it dockerlgtview_LGTview_1 /etc/init.d/apache2 reload
+	docker exec -it lgthgt_LGTView_1 /etc/init.d/apache2 reload
 	echo "Login requirement added. Please be sure to save this information somewhere so that you do not lose access to the site."
 fi
 
 echo -e "----------------------------------------------------------------------------------------------------"
 if [ "$ssl_response" = 'yes' ]
 then
-	docker exec -it dockerlgtview_LGTview_1 sed -i '8s@443@443 https@' /etc/apache2/ports.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i '5s@Listen 80@#Listen 80@' /etc/apache2/ports.conf
-	docker exec -it dockerlgtview_LGTview_1 /etc/init.d/apache2 reload
+	docker exec -it lgthgt_LGTView_1 sed -i '8s@443@443 https@' /etc/apache2/ports.conf
+	docker exec -it lgthgt_LGTView_1 sed -i '5s@Listen 80@#Listen 80@' /etc/apache2/ports.conf
+	docker exec -it lgthgt_LGTView_1 /etc/init.d/apache2 reload
 
 	echo -n "Please answer the following in order to complete the SSL setup (https) for the site."
 	echo -ne "\nCountry Name (2 letter code) [US]: "
@@ -113,26 +114,26 @@ then
 	read division
 	echo -ne "Email for setup contact [the_best_email@domain.com]: "
 	read email
-	docker exec -it dockerlgtview_LGTview_1 openssl req -x509 -nodes -days 1460 -newkey rsa:2048 \
+	docker exec -it lgthgt_LGTView_1 openssl req -x509 -nodes -days 1460 -newkey rsa:2048 \
 		-keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt \
 		-subj "/C=$country/ST=$statei/L=$city/O=$organization/OU=$division/CA=TRUE/CN=localhost"
 
 	# Modify the confs to use the newly generated SSL cert+key
-	docker exec -it dockerlgtview_LGTview_1 sed -i '32s@/etc/ssl/certs/ssl-cert-snakeoil.pem@/etc/apache2/ssl/apache.crt@' /etc/apache2/sites-available/default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i '33s@/etc/ssl/private/ssl-cert-snakeoil.key@/etc/apache2/ssl/apache.key@' /etc/apache2/sites-available/default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i "3s/webmaster@localhost/$email/" /etc/apache2/sites-available/default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i "3a\\\t\tServerName localhost" /etc/apache2/sites-available/default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i "4a\\\t\tServerAlias lgtview" /etc/apache2/sites-available/default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 sed -i "1s/^/Listen 443\n/" /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i '32s@/etc/ssl/certs/ssl-cert-snakeoil.pem@/etc/apache2/ssl/apache.crt@' /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i '33s@/etc/ssl/private/ssl-cert-snakeoil.key@/etc/apache2/ssl/apache.key@' /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i "3s/webmaster@localhost/$email/" /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i "3a\\\t\tServerName localhost" /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i "4a\\\t\tServerAlias lgtview" /etc/apache2/sites-available/default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 sed -i "1s/^/Listen 443\n/" /etc/apache2/sites-available/default-ssl.conf
 
 	# Set this new SSL conf and restart Apache one last time. SSL should now be enabled
-	docker exec -it dockerlgtview_LGTview_1 a2ensite default-ssl.conf
-	docker exec -it dockerlgtview_LGTview_1 /etc/init.d/apache2 reload
+	docker exec -it lgthgt_LGTView_1 a2ensite default-ssl.conf
+	docker exec -it lgthgt_LGTView_1 /etc/init.d/apache2 reload
 	echo -ne "SSL now implemented (access site through https)."
-	docker exec -it dockerlgtview_LGTview_1 sed -i "/localhost\:8080/d" /var/www/html/lgtview.js
+	docker exec -it lgthgt_LGTView_1 sed -i "/localhost\:8080/d" /var/www/html/lgtview.js
 else
 	echo -ne "SSL NOT implemented (access site through http). Transmitted data is potentially subject to eavesdropping."
-	docker exec -it dockerlgtview_LGTview_1 sed -i "/localhost\:443/d" /var/www/html/lgtview.js
+	docker exec -it lgthgt_LGTView_1 sed -i "/localhost\:443/d" /var/www/html/lgtview.js
 fi
 echo -e "\n----------------------------------------------------------------------------------------------------"
 
@@ -144,7 +145,7 @@ while [ "$UP1" -ne 1 ]; do
 done
 
 echo "Going to load example data into MongoDB..."
-docker exec -it dockerlgtview_LGTview_1 perl /lgtview/bin/lgt_load_mongo.pl --metadata=/files_for_mongo_and_twinblast/example_metadata.out --db=lgtview_example --host=172.18.0.1:27017
+docker exec -it lgthgt_LGTView_1 perl /LGTHGT/LGTView/bin/lgt_load_mongo.pl --metadata=/files_for_mongo_and_twinblast/example_metadata.out --db=lgtview_example --host=172.18.0.1:27017
 echo "MongoDB loaded."
 
 echo -e "\n----------------------------------------------------------------------------------------------------"
