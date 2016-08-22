@@ -169,12 +169,12 @@ if($format eq 'text') {
 	my $abundance_type = $cgi->param('abundance_type');
 
 	my $cnt = 0;
-	`touch /home/lgtview/lgtview_heatmap.png`; # empty it
+	`touch $TMP_DIR/lgtview_heatmap.png`; # empty it
 
 	# Now run the R script
-	`/usr/bin/lgtview_plot_heatmap.R $TMP_DIR/$outfile $tax_rank $chosen_metadata $abundance_type $limit`;
+	`Rscript /usr/bin/lgtview_plot_heatmap.R $TMP_DIR/$outfile $tax_rank $chosen_metadata $abundance_type $limit`;
 
-	while(-z "$TMP_URL/lgtview_heatmap.png"){
+	while(-z "$TMP_DIR/lgtview_heatmap.png"){
 	
 		if($cnt > 60) {
 			last; # should not take this long
@@ -188,7 +188,7 @@ if($format eq 'text') {
 	# Now that the file is present, use it to run the heatmap R script
 	if($file_format eq 'local') {
 
-        print to_json({'file' => "$TMP_URL/lgtview_heatmap.png"});
+        print to_json({'file' => "$TMP_DIR/lgtview_heatmap.png"});
 	}
 }
 
