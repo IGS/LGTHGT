@@ -4,6 +4,10 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 MAINTAINER James Matsumura (jmatsumura@som.umaryland.edu)
 
+# Install R and dependencies
+RUN sudo apt-get -y install r-base r-base-dev
+RUN R -e "install.packages(c('plyr', 'RColorBrewer', 'data.table'), repos='http://cran.rstudio.com/'"
+
 # Install Apache and git
 RUN sudo apt-get update && sudo apt-get install -y apache2 \
 							apache2-utils \

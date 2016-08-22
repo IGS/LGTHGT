@@ -632,9 +632,9 @@ Ext.onReady(function(){
     
     function loadPlot() { 
 
-        var filters = getFilters();
-
         if(Ext.ComponentQuery.query('#plot_menu')[0].getText() == 'heatmap'){
+
+        	var filters = getFilters();
 
 			var hmparams = {
                 cond: Ext.encode(filters),
@@ -644,6 +644,9 @@ Ext.onReady(function(){
 				abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getText(),
 				limit: Ext.ComponentQuery.query('#limit')[0].getValue()
 			}
+
+			Ext.apply(hmparams,conf);
+			var request = Ext.urlEncode(hmparams);
 		
 			Ext.Ajax.request({
 				url: '/cgi-bin/view.cgi',
