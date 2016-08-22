@@ -166,6 +166,9 @@ while (my $line = <$lgtviewJS>) {
 	} elsif ($line =~ /END FILTER SECTION 2/) {
 		$inFilterSection2 = 0;
 		print $outfile $line;
+	} elsif ($line =~ /example_blastn.out/) {
+		$line =~ s/example\_blastn.out/final\_blast.out/g;
+		print $outfile $line;
 	} else {
 
 		# Check and print all lines outside of these customizable boundaries
