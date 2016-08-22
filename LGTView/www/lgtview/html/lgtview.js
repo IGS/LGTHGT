@@ -261,7 +261,7 @@ Ext.onReady(function(){
                 },{
                 text: 'Load Plot',
                 handler: function() {
-                    alert('hi');
+                    loadPlot();
                 }
                 }
             ]
@@ -632,13 +632,13 @@ Ext.onReady(function(){
     
     function loadPlot() { 
 
-        if(Ext.ComponentQuery.query('#plot_menu')[0].getValue() eq 'heatmap'){
+        if(Ext.ComponentQuery.query('#plot_menu')[0].getText() == 'heatmap'){
 
 			var hmparams = {
 				file_format: 'local',
 				tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue(),
-				metadata_header: Ext.ComponentQuery.query('#metadata')[0].getValue(),
-				abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getValue(),
+				metadata_header: Ext.ComponentQuery.query('#metadata')[0].getText(),
+				abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getText(),
 				limit: Ext.ComponentQuery.query('#limit')[0].getValue()
 			}
 		

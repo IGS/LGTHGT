@@ -122,7 +122,15 @@ if($format eq 'text') {
 	}
 
 	elsif($file_format eq 'local') {
-    	print $out join("\t",@$headers);
+
+		my @final_headers;
+
+		foreach my $header (@$headers) {
+			$header =~ s/\s+.*//; # remove the '(#)' chars from out
+			push @final_headers, $header
+		}
+
+    	print $out join("\t",@final_headers);
     	print $out "\n";
 	}
 
