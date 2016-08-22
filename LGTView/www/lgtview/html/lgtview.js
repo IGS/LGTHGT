@@ -632,9 +632,12 @@ Ext.onReady(function(){
     
     function loadPlot() { 
 
+        var filters = getFilters();
+
         if(Ext.ComponentQuery.query('#plot_menu')[0].getText() == 'heatmap'){
 
 			var hmparams = {
+                cond: Ext.encode(filters),
 				file_format: 'local',
 				tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue(),
 				metadata_header: Ext.ComponentQuery.query('#metadata')[0].getText(),
