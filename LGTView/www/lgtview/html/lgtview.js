@@ -630,24 +630,30 @@ Ext.onReady(function(){
         });
     }
     
-    function loadHeatmap() { 
+    function loadPlot() { 
 
-		var hmparams = {
-			dat: readstore,
-			tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue,
-			metadata_header: Ext.ComponentQuery.query('#metadata')[0].getValue,
-			abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getValue,
-			limit: Ext.ComponentQuery.query('#limit')[0].getValue()
-		}
-		
-		Ext.Ajax.request({
-			url: '/cgi-bin/generate_heatmap.cgi',
-			params: hmparams,
-			success: function(response) {
-				var res = Ext.decode(response.responseText);
-				Ext.getDom('bac-iframe').src = res.file;
+        if(Ext.ComponentQuery.query('#plot_menu')[0].getValue() eq 'heatmap'){
+
+			var hmparams = {
+				file_format: 'local',
+				tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue(),
+				metadata_header: Ext.ComponentQuery.query('#metadata')[0].getValue(),
+				abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getValue(),
+				limit: Ext.ComponentQuery.query('#limit')[0].getValue()
 			}
-		});
+		
+			Ext.Ajax.request({
+				url: '/cgi-bin/view.cgi',
+				params: hmparams,
+				success: function(response) {
+					var res = Ext.decode(response.responseText);
+					Ext.getDom('bac-iframe').src = res.file;
+				}
+			});
+
+		} else {
+			loadData(); // place holder for Krona reload
+		}
 	} 
 
     function appendFilter(filter) { 

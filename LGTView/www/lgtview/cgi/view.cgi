@@ -104,6 +104,7 @@ if($format eq 'text') {
 
 	elsif($file_format eq 'local') {
 		open($out, ">$TMP_DIR/$outfile" || die "Can't open file $TMP_DIR/$outfile");
+    	print "Content-type: text/plain\n\n";
 	}
 
     my $headers = [];
@@ -148,15 +149,38 @@ if($format eq 'text') {
 		}
     }
 
+	if($file_format eq 'local') {
+		close $out;
+	}
+
+	# These are all the params, in order, required for the R script
+	my $final_file = "$TMP_DIR/$outfile";
+	my $limit = $cgi->param('limit');
+	my $tax_rank = $cgi->param('tax_rank');
+	my $chosen_metadata = $cgi->param('chosen_metadata');
+	my $abundance_type = $cgi->param('abundance_type');
+
+	my $cnt = 0;
+	`touch /home/lgtview/lgtview_heatmap.png`; # empty it
+
+	# Now run the R script
+	`/home/lgtview/Rscript /usr/bin/lgtview_plot_heatmap.R $TMP_DIR/$outfile $tax_rank $chosen_metadata $abundance_type $limit`;
+
+	while(-z "/home/lgtview/lgtview_heatmap.png"){
+	
+		if($cnt > 60) {
+			last; # should not take this long
+			print to_json({timedout=>1});
+		}
+
+		sleep(1);
+		$cnt++;
+	}
+
 	# Now that the file is present, use it to run the heatmap R script
 	if($file_format eq 'local') {
 
-		# These are all the params, in order, required for the R script
-		my $infile = $cgi->param('infile');
-		my $tax_rank = $cgi->param('tax_rank');
-		my $chosen_metadata = $cgi->param('chosen_metadata');
-		my $abudance_type = $cgi->param('abundance_type');
-		my $filter = "$TMP_DIR/$outfile";
+        print to_json({'file' => "/home/lgtview/lgtview_heatmap.png"});
 	}
 }
 
