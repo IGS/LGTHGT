@@ -9,7 +9,7 @@ echo -e "\n*******************\n"
 # At this point need to download a few files that are going to be mounted via
 # docker-compose so that MongoDB can be initiated with the necessary taxonomy data
 echo "Setting up the necessary local directories and files for MongoDB and TwinBLAST......"
-if [ -d "/home/lgtview/files_for_mongo_and_twinblast" ]; then
+if [ ! -d "/home/lgtview/files_for_mongo_and_twinblast" ]; then
 	mkdir -p /home/lgtview/files_for_mongo_and_twinblast
 	chmod 777 /home/lgtview/files_for_mongo_and_twinblast
 fi
