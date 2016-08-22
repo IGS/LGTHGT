@@ -521,19 +521,6 @@ Ext.onReady(function(){
             }
         }
 
-        else if(out_type == 'local') {
-            var vals = hm_form.getValues();
-            params = {
-                cond: Ext.encode(filters),
-                file_format: out_type,
-                format: 'text',
-                infile: vals.inp_infile,
-                tax_rank: vals.inp_tax_rank,
-                chosen_metadata: vals.inp_chosen_metadata,
-                abudance_type: vals.inp_abundance_type
-            }
-        }
-
         Ext.apply(params,conf);
         var request = Ext.urlEncode(params);
         if (!Ext.fly('frmDummy')) {
@@ -643,6 +630,26 @@ Ext.onReady(function(){
         });
     }
     
+    function loadHeatmap() { 
+
+		var hmparams = {
+			dat: readstore,
+			tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue,
+			metadata_header: Ext.ComponentQuery.query('#metadata')[0].getValue,
+			abundance_type: Ext.ComponentQuery.query('#abundance_type')[0].getValue,
+			limit: Ext.ComponentQuery.query('#limit')[0].getValue()
+		}
+		
+		Ext.Ajax.request({
+			url: '/cgi-bin/generate_heatmap.cgi',
+			params: hmparams,
+			success: function(response) {
+				var res = Ext.decode(response.responseText);
+				Ext.getDom('bac-iframe').src = res.file;
+			}
+		});
+	} 
+
     function appendFilter(filter) { 
         for(i in filter) if (filter.hasOwnProperty(i)) {
             if(filterstore.findRecord('key',i)) {

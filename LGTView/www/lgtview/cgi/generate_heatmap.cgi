@@ -6,7 +6,7 @@ generate_heatmap.cgi
 
 =head1 SYNOPSIS
 
-Script called when clicking the 'load' button from lgtview.js.
+Script called when clicking the 'load' button when a heatmap is chosen from lgtview.js.
 
 =head1 DESCRIPTION
 
@@ -78,9 +78,23 @@ foreach my $m ( @{$md[0]} ) { # iterate over array of hashref
 close $outfile;
 
 # Run the R script
-# Need to change this to a docker command between linked containers
-`Rscript /usr/bin/lgtview_plot_heatmap.R $file $tax $metadata_header $abundance_type $limit`;
+# Perhaps need to change this to a docker command between linked containers
+`/home/lgtview/Rscript /usr/bin/lgtview_plot_heatmap.R $file $tax $metadata_header $abundance_type $limit`;
 
 # Do a polling check for when this file is present and then send 
 # the path to JS for viewing. 
 
+my $cnt = 0; # Hack to avoid infinite loop while debugging
+my $hm_out = "/home/lgtview/lgtview_heatmap.png";
+while(-z $hm_out){
+
+	if($cnt > 45) {
+		last; # should not take this long to generate the image
+		print to_json({timedout=>1});
+	}
+
+	sleep(1);
+	$cnt++;
+}
+
+print to_json({file=>$hm_out});
