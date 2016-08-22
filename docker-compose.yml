@@ -7,10 +7,8 @@ services:
   image: lgtview:latest
   depends_on:
    - mongo
-   - lgtv_r
   links:
    - mongo
-   - lgtv_r
   ports:
    - 443:443
    - 8080:80
@@ -19,7 +17,6 @@ services:
    - "/home/lgtview/files_for_mongo_and_twinblast:/files_for_mongo_and_twinblast"
   volumes_from:
    - mongodata
-   - lgtv_r
 
  mongodata:
   image: mongo:2.6
@@ -34,9 +31,3 @@ services:
   ports:
    - "27017:27017"
   command: --smallfiles --rest
-
- lgtv_r:
-  build: ./docker_R/.
-  image: lgtv_r:latest
-  volumes: 
-   - /home/lgtview
