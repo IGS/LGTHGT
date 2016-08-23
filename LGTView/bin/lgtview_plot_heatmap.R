@@ -246,7 +246,7 @@ if(dim(idv_final_df)[1] < 2){
 # If data can generate a heatmap (greater than 2,2 dimensions), generate it  
 } else {
   
-  png(outfile, width=2400, height=1920)
+  png(outfile, width=4000, height=2500)
   
   # Sort by row names to make the graph a bit more legible. Note that, based on 
   # similarity of abundance distribution (which needs to be interpeted carefully)

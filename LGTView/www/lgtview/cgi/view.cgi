@@ -169,8 +169,8 @@ if($format eq 'text') {
 	# These are all the params, in order, required for the R script
 	my $final_file = "$TMP_DIR/$outfile";
 	my $limit = $cgi->param('limit');
-	my $tax_rank = $cgi->param('tax_rank');
-	my $chosen_metadata = $cgi->param('chosen_metadata');
+	my $tax_rank = $cgi->param('tax');
+	my $chosen_metadata = $cgi->param('metadata_header');
 	my $abundance_type = $cgi->param('abundance_type');
 
 	my $cnt = 0;
