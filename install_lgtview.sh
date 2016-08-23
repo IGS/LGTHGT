@@ -148,7 +148,7 @@ echo "Going to load example data into MongoDB..."
 docker exec -it lgthgt_LGTView_1 perl /usr/bin/lgt_load_mongo.pl --metadata=/files_for_mongo_and_twinblast/example_metadata.out --db=lgtview_example --host=172.18.0.1:27017
 echo "MongoDB loaded."
 
-docker exec -it lgthgt_LGTView_1 mv /files_for_mongo_and_twinblast/example_blastn.out /export/lgt/files/.
+docker exec -it lgthgt_LGTView_1 cp /files_for_mongo_and_twinblast/example_blastn.out /export/lgt/files/.
 
 echo -e "\n----------------------------------------------------------------------------------------------------"
 echo -e "\nLGTView installation completed.\n"

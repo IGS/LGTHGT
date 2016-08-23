@@ -12,8 +12,9 @@ RUN sudo apt-get update && sudo apt-get install -y apache2 \
 							openssl \
 							r-base
 
-# Install dependencies
-RUN R -e "install.packages(c('plyr', 'RColorBrewer', 'data.table'), repos='http://cran.rstudio.com/'"
+# Install R dependencies (issue with installing plyr via R for 3.0.2 default for r-base currently)
+RUN R -e "install.packages(c('RColorBrewer', 'data.table'), repos='http://cran.rstudio.com/')"
+RUN sudo apt-get install r-cran-plyr
 
 # Make the custom conf/ssl directories available to Apache
 RUN sudo mkdir /etc/apache2/{conf.d,ssl} \
