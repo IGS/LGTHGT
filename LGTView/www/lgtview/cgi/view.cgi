@@ -127,6 +127,11 @@ if($format eq 'text') {
 
 		foreach my $header (@$headers) {
 			$header =~ s/\s+.*//; # remove the '(#)' chars from out
+
+            if($header =~ m/blast_lca/){ # need to maintain this header syntax for consistency
+                $header .= ".list";
+            }
+
 			push @final_headers, $header
 		}
 
@@ -185,10 +190,10 @@ if($format eq 'text') {
 		$cnt++;
 	}
 
-	# Now that the file is present, use it to run the heatmap R script
+	# File should be ready, whether it worked or not share this png (script will output errors in png too)
 	if($file_format eq 'local') {
 
-        print to_json({'file' => "$TMP_DIR/lgtview_heatmap.png"});
+        print to_json({'file' => "$TMP_URL/lgtview_heatmap.png"});
 	}
 }
 

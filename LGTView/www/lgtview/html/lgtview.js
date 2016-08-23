@@ -638,6 +638,7 @@ Ext.onReady(function(){
 
 			var hmparams = {
                 cond: Ext.encode(filters),
+                format: 'text',
 				file_format: 'local',
 				tax: Ext.ComponentQuery.query('#tax_rank')[0].getValue(),
 				metadata_header: Ext.ComponentQuery.query('#metadata')[0].getText(),

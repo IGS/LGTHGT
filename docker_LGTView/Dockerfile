@@ -53,8 +53,6 @@ RUN sudo apt-get update && sudo apt-get install -y perl \
 
 # Install necessary perl dependencies to run TwinBLAST and LGTview
 RUN cpanm --force CGI \
-    DBI \
-    DBD::mysql \
     File::Slurp \
     File::Find \
 	File::Path \
