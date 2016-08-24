@@ -18,7 +18,7 @@ if [ ! -f "/home/lgtview/files_for_mongo_and_twinblast/example_metadata.out" ]; 
 	wget -O /home/lgtview/files_for_mongo_and_twinblast/example_metadata.out https://sourceforge.net/projects/lgthgt/files/example_metadata.out/download
 fi
 if [ ! -f "/home/lgtview/files_for_mongo_and_twinblast/example_blastn.out" ]; then
-	wget -O /home/lgtview/files_for_mongo_and_twinblast/example_blastn.out https://sourceforge.net/projects/lgthgt/files/example_blastn.out/download
+	wget -O /home/lgtview/files_for_mongo_and_twinblast/example_blastn.out https://sourceforge.net/projects/lgthgt/files/example_blastn2.out/download
 fi
 
 echo -e "\nDone Setting up the necessary local directories and files for MongoDB."
