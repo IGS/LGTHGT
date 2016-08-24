@@ -53,7 +53,7 @@ my $db = $conf->val($chosen_db, 'dbname');
 my $host = $conf->val($chosen_db, 'hostname');
 my $mongo_conn = MongoDB->connect($host);
 my $mongo_db = $mongo_conn->get_database($db);
-my $mongo_coll = $mongo_conn->get_collection('bwa_mapping');
+my $mongo_coll = $mongo_db->get_collection('bwa_mapping');
 
 # Deal with the CGI inputs.
 my $cgi = CGI->new;
@@ -86,6 +86,8 @@ if($qlist) {
 # is clicked through the site. This check is present to enable this 
 # script to take on some additional functionality down the line. 
 if($print_report){								  
+
+	print "Content-Type: application/json\n\n";
 
 	my $format = 'blast';
 	my $searchio = Bio::SearchIO->new(-format => $format,
@@ -165,9 +167,7 @@ if($print_report){
 	}
 	
 	close $fh;
-	$dbh->disconnect();
 
-	print "Content-Type: application/json\n\n";
 	print to_json({message => "finished", success => 1, path => "$report_file"});
 	exit;
 }
@@ -175,7 +175,7 @@ if($print_report){
 # Function to query the DB for the particular curation note given a sequence ID
 sub getCurationNote {
 	my($query_id) = @_;
-	my $cur_res = $mongo_coll->( { 'read' => "$query_id" } );
+	my $cur_res = $mongo_coll->find( { 'read' => "$query_id" } );
 	my @arr = $cur_res->next; # grab doc from cursor
 	my $curation_note = $arr[0]->{'curation_note'};
 	if(not defined $curation_note){
