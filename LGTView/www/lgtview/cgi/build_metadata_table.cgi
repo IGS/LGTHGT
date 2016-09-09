@@ -31,6 +31,7 @@ e-mail: jmatsumura@som.umaryland.edu
 
 use strict;
 use warnings;
+no warnings 'experimental::smartmatch';
 use CGI;
 use JSON;
 use URI::Escape;
@@ -79,7 +80,11 @@ while (my $sra_dirs = <$sra_list_file>) { # process each SRA LGTSeek output resu
 
 		if($firstLine == 0) {
 			@sra_headers = split(/\,/, $line); # banking on SRA using commas for separation only 
-			push @sra_headers, 'curation_note'; # account for TB curation note here
+
+			if( not 'curation_note' ~~ @sra_headers) { # only if no curation note present
+				push @sra_headers, 'curation_note'; # account for TB curation note here
+			}
+
 			$firstLine = 1;
 	
 		} else {
