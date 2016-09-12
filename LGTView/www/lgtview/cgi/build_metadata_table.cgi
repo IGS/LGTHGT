@@ -81,15 +81,11 @@ while (my $sra_dirs = <$sra_list_file>) { # process each SRA LGTSeek output resu
 		if($firstLine == 0) {
 			@sra_headers = split(/\,/, $line); # banking on SRA using commas for separation only 
 
-			if( not 'curation_note' ~~ @sra_headers) { # only if no curation note present
-				push @sra_headers, 'curation_note'; # account for TB curation note here
-			}
 
 			$firstLine = 1;
 	
 		} else {
 			@sra_values = split(/\,/, $line); 
-			push @sra_values, 'NA'; 
 		}
 	}
 
@@ -130,6 +126,12 @@ while (my $sra_dirs = <$sra_list_file>) { # process each SRA LGTSeek output resu
 
 		if($firstLine == 0) {
 
+			if($line !~ /curation\_note/) { # only if no curation note present
+				push @sra_headers, 'curation_note';
+				push @sra_values, 'NA'; 
+				push @overall_metadata, 'curation_note';
+			}
+
 			my $curr_metadata = join("\t", @sra_headers);
 			print $out "$line\t$curr_metadata\n"; 
 
@@ -145,6 +147,7 @@ while (my $sra_dirs = <$sra_list_file>) { # process each SRA LGTSeek output resu
 				}
 			}
 
+			# This is an array containing individual metadata arrays at each index
 			push @individual_metadata, \@sra_headers;
 
 			$firstLine = 1;
