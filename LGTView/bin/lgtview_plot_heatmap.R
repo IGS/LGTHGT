@@ -257,7 +257,7 @@ if(dim(idv_final_df)[1] < 2){
   par(mar=c(5, max(5,max(nchar(colnames(sorted_final_df)))/2.3),5,1))
   
   # Doing 100 for color gradient to accommodate relative abundance
-  cg <- colorRampPalette(brewer.pal(8,"RdBu"))(100)
+  cg <- colorRampPalette(rev(brewer.pal(8,"RdBu")))(100)
    
   # Need two images here in order to accommodate layout function
   layout(matrix(c(2,1), 2, 1), widths=c(0.2,0.2), heights=c(0.4,0.05))
