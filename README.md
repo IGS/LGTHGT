@@ -9,8 +9,8 @@ Unlike the previous repositories, this one will be all inclusive with both the D
 
 - LGTView from https://github.com/jmatsumura/lgtview
 - Docker LGTView from https://github.com/jmatsumura/docker_lgtview
-- LGTSeek from https://github.com/jorvis/ergatis/ 
-- Docker LGTSeek from https://github.com/adkinsrs/Ergatis-Docker 
+- LGTSeek from https://github.com/adkinsrs/ergatis-pipelines/tree/lgtseek/package-lgtseek 
+- Docker LGTSeek from https://github.com/adkinsrs/ergatis-docker-recipes/tree/master/lgtseek
 
 
 LGTView and LGTSeek are originally from author/users ~rileydavidr and ~KSieber
