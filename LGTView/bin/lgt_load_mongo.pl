@@ -263,7 +263,7 @@ sub process_metadata {
             my $type = $metadata_types->{$head[$i]};
             my $value = $fields[$i];
             if($type eq 'numeric') {
-                $value => $fields[$i] * 1.0;
+                $value = $fields[$i] * 1.0;
             }
             elsif($type eq 'list') {
                 my @val = split(/;/,$fields[$i]);
