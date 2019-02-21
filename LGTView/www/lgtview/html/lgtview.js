@@ -1,5 +1,11 @@
 Ext.Loader.setPath('Ext.ux', 'ux');
 Ext.Loader.setConfig({enabled: true});
+Ext.require([
+	     'Ext.ux.Portlet',
+	     'Ext.ux.PortalColumn',
+	     'Ext.ux.PortalPanel',
+	     'Ext.ux.PortalDropZone'
+	     ]);
 
 Ext.onReady(function(){
      var conf = {
