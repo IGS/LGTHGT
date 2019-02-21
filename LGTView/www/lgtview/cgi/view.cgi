@@ -249,9 +249,9 @@ sub pullFromColl2 {
     if($cond) {
         $condhash = from_json($cond);
     }
+    my $total = $mongo_coll->count_documents($condhash);
     my $cursor = $mongo_coll->query($condhash);
 #    my $cursor = $mongo_coll->query($condhash)->limit($limit)->skip($start)->fields({'read'=>1});
-    my $total = $cursor->count();
     my $fields = [];
     my $columns = [];
     my $limitcursor;
